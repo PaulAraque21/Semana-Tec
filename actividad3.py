@@ -7,11 +7,13 @@ path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
+
+# velocidades iniciales ajustadas para los fantasmas
 ghosts = [
-    [vector(-180, 160), vector(5, 0)],
-    [vector(-180, -160), vector(0, 5)],
-    [vector(100, 160), vector(0, -5)],
-    [vector(100, -160), vector(-5, 0)],
+    [vector(-180, 160), vector(6, 0)],
+    [vector(-180, -160), vector(0, 6)],
+    [vector(100, 160), vector(0, -6)],
+    [vector(100, -160), vector(-6, 0)],
 ]
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -72,8 +74,10 @@ def valid(point):
 
 def world():
     "Draw world using path."
-    bgcolor('black')
-    path.color('blue')
+
+    # cambio de colores de fondo y de carriles
+    bgcolor('#654321')
+    path.color('turquoise')
 
     for index in range(len(tiles)):
         tile = tiles[index]
@@ -86,7 +90,7 @@ def world():
             if tile == 1:
                 path.up()
                 path.goto(x + 10, y + 10)
-                path.dot(2, 'white')
+                path.dot(2, 'black') # cambio de color de los puntitos
 
 def move():
     "Move pacman and all ghosts."
@@ -115,11 +119,12 @@ def move():
         if valid(point + course):
             point.move(course)
         else:
+            # nuevas velocidades al cambiar dirección de los fantasmas
             options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
-                vector(0, -5),
+                vector(6, 0),
+                vector(-6, 0),
+                vector(0, 6),
+                vector(0, -6),
             ]
             plan = choice(options)
             course.x = plan.x
@@ -135,7 +140,7 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 100)
+    ontimer(move, 50) # hacer más rápida la tasa de refresco
 
 def change(x, y):
     "Change pacman aim if valid."
@@ -147,7 +152,7 @@ setup(420, 420, 370, 0)
 hideturtle()
 tracer(False)
 writer.goto(160, 160)
-writer.color('white')
+writer.color('black')
 writer.write(state['score'])
 listen()
 onkey(lambda: change(5, 0), 'Right')
